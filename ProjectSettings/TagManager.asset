@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MapStatus
   - BuilderStatus
+  - Ground
   layers:
   - Default
   - TransparentFX

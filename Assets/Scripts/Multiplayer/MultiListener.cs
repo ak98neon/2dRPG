@@ -153,6 +153,9 @@ public class MultiListener : MonoBehaviour
     void moveClient(PlayerDefaultDto data)
     {
         Respawn resp = GameObject.FindGameObjectWithTag(respawnTag).GetComponent<Respawn>();
+
+        string defaultZLayer = "-20";
+        data.Position.Z = defaultZLayer;
         resp.moveClient(data.Id, data.positionToVector3(), data.rotationToQuaternion());
     }
 

@@ -5,10 +5,10 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StatusPlayer : MonoBehaviour
 {
-    public GUIStyle guiStyle = new GUIStyle();
     [SerializeField]
     private string id;
     [SerializeField]
@@ -68,19 +68,6 @@ public class StatusPlayer : MonoBehaviour
         {
             listener.hitPlayer(ClientAction.KILL_CLIENT, this.Id, gameObject.transform.position);
             Destroy(gameObject);
-        }
-    }
-
-    void OnGUI()
-    {
-        if (IsClient)
-        {
-            if (isAlive())
-            {
-                guiStyle.normal.textColor = Color.white;
-                guiStyle.fontSize = 15;
-                GUI.Label(new Rect(Screen.width - 100, Screen.height - 100, 150, 30), "HP: " + HpPlayer, guiStyle);
-            }
         }
     }
 }

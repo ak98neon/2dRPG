@@ -21,8 +21,10 @@ public class Position
     {
         this.x = x;
         this.y = y;
-        this.z = z;
+        this.Z = z;
     }
+
+    public string Z { get => z; set => z = value; }
 
     public string GetX()
     {
@@ -36,6 +38,6 @@ public class Position
 
     public string GetZ()
     {
-        return this.z;
+        return this.Z;
     }
 }

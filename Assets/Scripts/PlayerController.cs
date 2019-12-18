@@ -1,25 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed;
-    private Rigidbody2D rb;
-    private Vector2 moveVelocity;
+    private Vector3 target;
+    private bool isMoving = false;
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
     void Update()
     {
-        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        moveVelocity = moveInput.normalized * speed;
+        if (Input.GetMouseButton(1))
+        {
+            target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            isMoving = true;
+        }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + moveVelocity * Time.deltaTime);
+        if (isMoving)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            if (transform.position == target)
+            {
+                isMoving = false;
+            }
+        }
     }
 }
