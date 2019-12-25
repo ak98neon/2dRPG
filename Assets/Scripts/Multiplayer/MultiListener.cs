@@ -9,11 +9,13 @@ public class MultiListener : MonoBehaviour
 {
     private static GameObject hostClient;
 
+    private AnimalObserver animalObserver;
+
+    private string id;
     public GameObject player;
     public GameObject anotherPlayer;
     private StreamWriter writer;
     private NetworkStream stream;
-    private string id;
     public static string respawnTag = "Respawn";
     private string DELIMETER = "|";
 
@@ -25,12 +27,14 @@ public class MultiListener : MonoBehaviour
 
     void Start()
     {
+        this.animalObserver = GameObject.FindGameObjectWithTag(MultiListener.respawnTag).GetComponent<AnimalObserver>();
+
         print("Connection");
         TcpClient client = new TcpClient(ip, port);
         stream = client.GetStream();
         stream.ReadTimeout = 5;
         stream.WriteTimeout = 3;
-        
+
         if (stream.CanRead)
         {
             writer = new StreamWriter(stream);
@@ -138,7 +142,8 @@ public class MultiListener : MonoBehaviour
         this.Id = data.Id;
 
         Respawn resp = GameObject.FindGameObjectWithTag(respawnTag).GetComponent<Respawn>();
-        hostClient = Instantiate(player, resp.transform.position, resp.transform.rotation);
+        Vector3 startPosition = new Vector3(resp.transform.position.x, resp.transform.position.y, -20);
+        hostClient = Instantiate(player, startPosition, resp.transform.rotation);
         StatusPlayer status = hostClient.GetComponent<StatusPlayer>();
         status.Id = this.Id;
         status.IsClient = true;
@@ -153,9 +158,6 @@ public class MultiListener : MonoBehaviour
     void moveClient(PlayerDefaultDto data)
     {
         Respawn resp = GameObject.FindGameObjectWithTag(respawnTag).GetComponent<Respawn>();
-
-        string defaultZLayer = "-20";
-        data.Position.Z = defaultZLayer;
         resp.moveClient(data.Id, data.positionToVector3(), data.rotationToQuaternion());
     }
 
@@ -166,22 +168,30 @@ public class MultiListener : MonoBehaviour
 
     void parseData(string data)
     {
+        PlayerDefaultDto parseData = PlayerDefaultDto.parse(data);
         if (data.Contains(ClientAction.NEW_SESSION.ToString()))
         {
-            PlayerDefaultDto parseData = PlayerDefaultDto.parse(data);
             createPlayer(parseData);
-        } else if (data.Contains(ClientAction.NEW_CLIENT.ToString()))
+        }
+        
+        if (data.Contains(ClientAction.NEW_CLIENT.ToString()))
         {
-            PlayerDefaultDto newCLientData = PlayerDefaultDto.parse(data);
-            createNewClient(newCLientData);
-        } else if (data.Contains(ClientAction.MOVE.ToString()))
+            createNewClient(parseData);
+        }
+        
+        if (data.Contains(ClientAction.MOVE.ToString()))
         {
-            PlayerDefaultDto moveData = PlayerDefaultDto.parse(data);
-            moveClient(moveData);
-        } else if (data.Contains(ClientAction.REMOVE.ToString()))
+            moveClient(parseData);
+        }
+        
+        if (data.Contains(ClientAction.REMOVE.ToString()))
         {
-            PlayerDefaultDto removeData = PlayerDefaultDto.parse(data);
-            removePlayer(removeData);
+            removePlayer(parseData);
+        }
+        
+        if (data.Contains(ClientAction.ANIMAL_MOVE.ToString()))
+        {
+            animalObserver.moveAnimal(parseData);
         }
     }
 }

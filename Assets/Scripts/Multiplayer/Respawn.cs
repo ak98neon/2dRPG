@@ -26,7 +26,7 @@ public class Respawn : MonoBehaviour
         clients.Remove(id);
     }
 
-    public void moveClient(string id, Vector3 pos, Quaternion rot)
+    public void moveClient(string id, Vector2 pos, Quaternion rot)
     {
         GameObject gameObject = clients[id];
         gameObject.transform.position = pos;

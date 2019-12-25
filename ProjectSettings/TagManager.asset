@@ -7,6 +7,7 @@ TagManager:
   - MapStatus
   - BuilderStatus
   - Ground
+  - Animal
   layers:
   - Default
   - TransparentFX

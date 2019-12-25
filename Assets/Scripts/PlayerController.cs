@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isMoving)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(new Vector2(transform.position.x, transform.position.y), target, speed * Time.deltaTime);
             if (transform.position == target)
             {
                 isMoving = false;

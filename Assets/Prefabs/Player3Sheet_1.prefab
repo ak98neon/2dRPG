@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -7324909151272607657}
   - component: {fileID: 6718465172115185794}
   - component: {fileID: 6729002891568780251}
+  - component: {fileID: -4185233163064363084}
   m_Layer: 0
   m_Name: Player3Sheet_1
   m_TagString: Player
@@ -113,7 +114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6119733865312879622}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.949, y: -2.115, z: 0}
+  m_LocalPosition: {x: -5.949, y: -2.115, z: -20}
   m_LocalScale: {x: 5.512177, y: 5.429487, z: 1}
   m_Children:
   - {fileID: 114984685}
@@ -256,3 +257,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+--- !u!114 &-4185233163064363084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6119733865312879622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0ce19af12edf0a4d984a07b2433b179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageSize: 1
+  typeOfWeapon: 0
