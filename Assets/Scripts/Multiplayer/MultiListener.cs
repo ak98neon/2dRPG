@@ -56,21 +56,37 @@ public class MultiListener : MonoBehaviour
         Position pos = new Position(playerPos.x.ToString(), playerPos.y.ToString(), playerPos.z.ToString());
         Rotation rot = new Rotation(playerRot.x.ToString(), playerRot.y.ToString(), playerRot.z.ToString(), playerRot.w.ToString());
 
-        string action = GetClientActionName(ClientAction.REMOVE);
-        PlayerDefaultDto request = new PlayerDefaultDto(Id, pos, rot, action);
+        string actionType = GetClientActionName(ClientAction.PLAYER);
+        string action = GetActionName(Action.REMOVE_CLIENT);
+        PlayerDefaultDto request = new PlayerDefaultDto(Id, pos, rot, actionType, action);
 
         string json = JsonUtility.ToJson(request);
         send(json);
     }
 
-    public void handleEvent(Vector3 position, Quaternion rotation, ClientAction action)
+    public void handleEvent(Vector3 position, Quaternion rotation, ClientAction actionType, Action action)
     {
         Position pos = CoordinatsUtil.vectorToPosition(position);
         Rotation rot = CoordinatsUtil.quaternionToRotation(rotation);
 
-        string actionStr = GetClientActionName(action);
+        string actionStrType = GetClientActionName(actionType);
+        string actionStr = GetActionName(action);
 
-        PlayerDefaultDto request = new PlayerDefaultDto(this.Id, pos, rot, actionStr);
+        PlayerDefaultDto request = new PlayerDefaultDto(this.Id, pos, rot, actionStr, actionStr);
+        string json = JsonUtility.ToJson(request);
+        send(json);
+    }
+
+    public void handleAnimalAction(string id, Vector3 position, Quaternion rotation, ClientAction actionType, Action action)
+    {
+        Position pos = CoordinatsUtil.vectorToPosition(position);
+        pos.Z = "-20";
+        Rotation rot = CoordinatsUtil.quaternionToRotation(rotation);
+
+        string actionStrType = GetClientActionName(actionType);
+        string actionStr = GetActionName(action);
+
+        PlayerDefaultDto request = new PlayerDefaultDto(id, pos, rot, actionStrType, actionStr);
         string json = JsonUtility.ToJson(request);
         send(json);
     }
@@ -85,13 +101,14 @@ public class MultiListener : MonoBehaviour
         send(json);
     }
 
-    public void hitPlayer(ClientAction action, string targetId, Vector3 target)
+    public void hitPlayer(ClientAction actionType, Action action, string targetId, Vector3 target)
     {
         Position tarPosition = CoordinatsUtil.vectorToPosition(target);
 
-        string actionStr = GetClientActionName(action);
+        string actionStrType = GetClientActionName(actionType);
+        string actionStr = GetActionName(action);
 
-        ShootDataDto shoot = new ShootDataDto(this.Id, actionStr, targetId, tarPosition);
+        ShootDataDto shoot = new ShootDataDto(this.Id, actionStrType, actionStr, targetId, tarPosition);
         string json = JsonUtility.ToJson(shoot);
         send(json);
     }
@@ -166,32 +183,58 @@ public class MultiListener : MonoBehaviour
         return Enum.GetName(typeof(ClientAction), value);
     }
 
+    public string GetActionName(Action action)
+    {
+        return Enum.GetName(typeof(Action), action);
+    }
+
     void parseData(string data)
     {
         PlayerDefaultDto parseData = PlayerDefaultDto.parse(data);
-        if (data.Contains(ClientAction.NEW_SESSION.ToString()))
+        if (data.Contains(ClientAction.PLAYER.ToString()))
         {
-            createPlayer(parseData);
+            if (data.Contains(Action.NEW_SESSION.ToString()))
+            {
+                createPlayer(parseData);
+            }
+
+            if (data.Contains(Action.NEW_CLIENT.ToString()))
+            {
+                createNewClient(parseData);
+            }
+
+            if (data.Contains(Action.PLAYER_MOVE.ToString()))
+            {
+                moveClient(parseData);
+            }
+
+            if (data.Contains(Action.REMOVE_CLIENT.ToString()))
+            {
+                removePlayer(parseData);
+            }
         }
-        
-        if (data.Contains(ClientAction.NEW_CLIENT.ToString()))
+
+        if (data.Contains(ClientAction.ANIMAL.ToString()))
         {
-            createNewClient(parseData);
+            if (data.Contains(Action.ANIMAL_MOVE.ToString()))
+            {
+                animalObserver.moveAnimal(parseData);
+            }
+
+            if (data.Contains(Action.ANIMAL_DIE.ToString()))
+            {
+                animalObserver.destroyAnimal(parseData);
+            }
+
+            if (data.Contains(Action.ANIMAL_CREATE.ToString()))
+            {
+                animalObserver.createNewAnimal(parseData);
+            }
         }
-        
-        if (data.Contains(ClientAction.MOVE.ToString()))
+
+        if (data.Contains(ClientAction.ITEMS.ToString()))
         {
-            moveClient(parseData);
-        }
-        
-        if (data.Contains(ClientAction.REMOVE.ToString()))
-        {
-            removePlayer(parseData);
-        }
-        
-        if (data.Contains(ClientAction.ANIMAL_MOVE.ToString()))
-        {
-            animalObserver.moveAnimal(parseData);
+
         }
     }
 }

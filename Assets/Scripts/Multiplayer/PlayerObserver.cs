@@ -18,7 +18,8 @@ public class PlayerObserver : MonoBehaviour
         if (oldCoordinats != transform.position)
         {
             oldCoordinats = transform.position;
-            listener.handleEvent(transform.position, transform.rotation, ClientAction.MOVE);
+            Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, -20);
+            listener.handleEvent(currentPos, transform.rotation, ClientAction.PLAYER, Action.PLAYER_MOVE);
         }
     }
 }

@@ -6,35 +6,29 @@ public class AnimalObserver : MonoBehaviour
 {
     IDictionary<string, GameObject> animals;
     public GameObject[] prefabs;
-    [SerializeField]
-    private int defaultCountOfAnimals;
     private MultiListener listener;
 
     void Start()
     {
         animals = new Dictionary<string, GameObject>();
         listener = GameObject.FindGameObjectWithTag(MultiListener.respawnTag).GetComponent<MultiListener>();
-
-        StartCoroutine(createDefaultAnimals());
     }
 
-    IEnumerator createDefaultAnimals()
+    public void createNewAnimal(PlayerDefaultDto dto)
     {
-        for (int i = 0; i < defaultCountOfAnimals; i++)
+        Vector3 pos = dto.positionToVector3();
+        Quaternion rot = dto.rotationToQuaternion();
+        if (pos.x == 0 && pos.y == 0)
         {
-            createNewAnimal(new Vector3(transform.position.x - Random.Range(2, 5), transform.position.y - Random.Range(2, 5), -20), transform.rotation, prefabs[0]);
-            yield return new WaitForSeconds(3);
-        }
-    }
+            pos = new Vector3(transform.position.x - Random.Range(1, 10), transform.position.y - Random.Range(1, 15), -20);
+            rot = transform.rotation;
+        } 
 
-    public void createNewAnimal(Vector2 startPosition, Quaternion rot, GameObject prefab)
-    {
         string newId = System.Guid.NewGuid().ToString();
-        GameObject newAnimal = Instantiate(prefab, startPosition, rot);
+        GameObject newAnimal = Instantiate(prefabs[0], pos, rot);
         AnimalStatus status = newAnimal.GetComponent<AnimalStatus>();
         status.Id = newId;
         animals.Add(newId, newAnimal);
-        moveAnimalServer(startPosition, rot, ClientAction.ANIMAL_MOVE);
     }
 
     public void moveAnimal(PlayerDefaultDto dto)
@@ -44,9 +38,15 @@ public class AnimalObserver : MonoBehaviour
         gameObject.transform.rotation = dto.rotationToQuaternion();
     }
 
-    public void moveAnimalServer(Vector3 pos, Quaternion rot, ClientAction action)
+    public void destroyAnimal(PlayerDefaultDto dto)
     {
-        pos.z = -20;
-        listener.handleEvent(pos, rot, action);
+        GameObject gameObject = animals[dto.Id];
+        Destroy(gameObject);
+    }
+
+    public void sendAnimalDataToServer(string id, Vector3 pos, Quaternion rot, ClientAction actionType, Action action)
+    {
+        Vector3 movePos = new Vector3(transform.position.x, transform.position.y, -20);
+        listener.handleAnimalAction(id, movePos, rot, actionType, action);
     }
 }

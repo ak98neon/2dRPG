@@ -11,23 +11,27 @@ public class PlayerDefaultDto
     [SerializeField]
     private Rotation rotation;
     [SerializeField]
+    private string actionType;
+    [SerializeField]
     private string action;
 
     public string Id { get => id; set => id = value; }
     public Position Position { get => position; set => position = value; }
     public Rotation Rotation { get => rotation; set => rotation = value; }
+    public string ActionType { get => actionType; set => actionType = value; }
     public string Action { get => action; set => action = value; }
 
     public PlayerDefaultDto()
     {
     }
 
-    public PlayerDefaultDto(string id, Position position, Rotation rotation, string action)
+    public PlayerDefaultDto(string id, Position position, Rotation rotation, string actionType, string action)
     {
-        this.Id = id;
-        this.Position = position;
-        this.Rotation = rotation;
-        this.Action = action;
+        this.id = id;
+        this.position = position;
+        this.rotation = rotation;
+        this.actionType = actionType;
+        this.action = action;
     }
 
     public PlayerDefaultDto(string id, Position position, string action)

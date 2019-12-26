@@ -7,6 +7,8 @@ public class ShootDataDto
     [SerializeField]
     private string id;
     [SerializeField]
+    private string actionType;
+    [SerializeField]
     private string action;
     [SerializeField]
     private string targetId;
@@ -17,14 +19,16 @@ public class ShootDataDto
     public string Action { get => action; set => action = value; }
     public Position Target { get => target; set => target = value; }
     public string TargetId { get => targetId; set => targetId = value; }
+    public string ActionType { get => actionType; set => actionType = value; }
 
     public ShootDataDto()
     {
     }
 
-    public ShootDataDto(string id, string action, string targetId, Position target)
+    public ShootDataDto(string id, string actionType, string action, string targetId, Position target)
     {
         this.id = id;
+        this.actionType = actionType;
         this.action = action;
         this.targetId = targetId;
         this.target = target;

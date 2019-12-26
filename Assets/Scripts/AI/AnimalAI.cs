@@ -51,7 +51,8 @@ public class AnimalAI : MonoBehaviour
 
       for (float t = 0.0f; t < 1.0f; t += Time.deltaTime * speed) {
           transform.position = Vector2.MoveTowards(transform.position, targetPos, t);
-          animalObserver.moveAnimalServer(transform.position, transform.rotation, ClientAction.ANIMAL_MOVE);
+          AnimalStatus animalStatus = GetComponent<AnimalStatus>();
+          animalObserver.sendAnimalDataToServer(animalStatus.Id, transform.position, transform.rotation, ClientAction.ANIMAL, Action.ANIMAL_MOVE);
           yield return null;
       }
 

@@ -21,7 +21,7 @@ public class PlayerAttack : MonoBehaviour
         if (Input.GetMouseButtonUp(1))
         {
             RaycastHit2D rayHit = Physics2D.Raycast(CurMousePos, Vector2.zero);
-            if (rayHit.collider != null)
+            if (rayHit.collider != null && rayHit.collider.tag == "Animal")
             {
                 if (typeOfWeapon.Equals(TypeWeapon.STEEL) && Vector2.Distance(transform.position, rayHit.transform.position) < 2)
                 {

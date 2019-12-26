@@ -61,12 +61,12 @@ public class StatusPlayer : MonoBehaviour
     {
         if (HpPlayer <= 0 && isClient)
         {
-            listener.hitPlayer(ClientAction.KILL_CLIENT, this.Id, gameObject.transform.position);
+            listener.hitPlayer(ClientAction.PLAYER, Action.KILL_CLIENT, this.Id, gameObject.transform.position);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             Destroy(gameObject);
         } else if (HpPlayer <= 0)
         {
-            listener.hitPlayer(ClientAction.KILL_CLIENT, this.Id, gameObject.transform.position);
+            listener.hitPlayer(ClientAction.PLAYER, Action.KILL_CLIENT, this.Id, gameObject.transform.position);
             Destroy(gameObject);
         }
     }
