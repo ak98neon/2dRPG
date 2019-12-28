@@ -14,6 +14,7 @@ public class AnimalStatus : MonoBehaviour
 
     private void Start()
     {
+        this.id = newAnimalId();
         animalObserver = GameObject.FindGameObjectWithTag(MultiListener.respawnTag).GetComponent<AnimalObserver>();
     }
 
@@ -38,5 +39,10 @@ public class AnimalStatus : MonoBehaviour
     {
         animalObserver.sendAnimalDataToServer(this.Id, transform.position, transform.rotation, ClientAction.ANIMAL, Action.ANIMAL_DIE);
         Destroy(gameObject);
+    }
+
+    public string newAnimalId()
+    {
+        return System.Guid.NewGuid().ToString();
     }
 }
