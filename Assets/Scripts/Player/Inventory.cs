@@ -11,8 +11,8 @@ public class Inventory : MonoBehaviour
 
     public void addItem(MaterialResource materialResource)
     {
-        Debug.Log("Add new item: " + materialResource.Name + " count: " + materialResource.ResourceCount);
         items.Add(materialResource);
+        Debug.Log("Add new item in inventory: " + materialResource.Name + " count: " + materialResource.ResourceCount);
     }
 
     public void removeItem(MaterialResource materialResource)

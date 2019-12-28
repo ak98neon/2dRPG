@@ -9,6 +9,8 @@ TagManager:
   - Ground
   - Animal
   - Item
+  - Resource
+  - Enemy
   layers:
   - Default
   - TransparentFX

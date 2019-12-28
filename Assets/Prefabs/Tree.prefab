@@ -136,5 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e647c2d9878bbbf4f921e3672358cf3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 
   name: Tree
   hp: 3

@@ -23,23 +23,41 @@ public class PlayerAttack : MonoBehaviour
             RaycastHit2D rayHit = Physics2D.Raycast(CurMousePos, Vector2.zero);
             if (rayHit.collider != null)
             {
-                if (typeOfWeapon.Equals(TypeWeapon.STEEL) && Vector2.Distance(transform.position, rayHit.transform.position) < 2)
+                float distanceToTarget = Vector2.Distance(transform.position, rayHit.transform.position);
+                if ((typeOfWeapon.Equals(TypeWeapon.STEEL) && distanceToTarget < 2) || (typeOfWeapon.Equals(TypeWeapon.GUNSHOOT) && distanceToTarget < 8))
                 {
                     if (rayHit.collider.tag == "Animal")
                     {
-                        attack(rayHit);
+                        attackAnimal(rayHit);
                     }
 
                     if (rayHit.collider.tag == "Item")
                     {
-                        mineItem(rayHit);
+                        mineItems(rayHit);
+                    }
+
+                    if (rayHit.collider.tag == "Resource")
+                    {
+                        mineResource(rayHit);
+                    }
+
+                    if (rayHit.collider.tag == "Enemy")
+                    {
+                        attackAnotherPlayer(rayHit);
                     }
                 }
             }
         }
     }
 
-    public void attack(RaycastHit2D rayHit)
+    public void attackAnotherPlayer(RaycastHit2D rayHit)
+    {
+        GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
+        StatusPlayer status = targetGameObject.GetComponent<StatusPlayer>();
+        status.hpPlayerDamage(damageSize);
+    }
+
+    public void attackAnimal(RaycastHit2D rayHit)
     {
         GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
         AnimalStatus status = targetGameObject.GetComponent<AnimalStatus>();
@@ -48,27 +66,45 @@ public class PlayerAttack : MonoBehaviour
         {
             if (null != targetGameObject.GetComponent<Items>())
             {
-                mineItem(rayHit);
+                mineItems(rayHit);
             }
             status.Die();
         }
     }
 
-    public void mineItem(RaycastHit2D rayHit)
+    public void mineItems(RaycastHit2D rayHit)
     {
-        Inventory inventory = GetComponent<Inventory>();
-
         GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
-        Items resources = targetGameObject.GetComponent<Items>();
-        foreach (MaterialResource resource in resources.ItemList)
+        ObjectStatus status = targetGameObject.GetComponent<ObjectStatus>();
+        status.Hp -= damageSize;
+        if (status.Hp <= 0)
         {
-            resource.Strength -= damageSize;
-            if (resource.Strength <= 0)
+            Items resources = targetGameObject.GetComponent<Items>();
+            foreach (MaterialResource resource in resources.ItemList)
             {
-                inventory.addItem(resource);
+                addItemToInventory(resource);
                 destroyItemObject(targetGameObject);
             }
         }
+    }
+
+    public void mineResource(RaycastHit2D rayHit)
+    {
+        GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
+        ObjectStatus status = targetGameObject.GetComponent<ObjectStatus>();
+        status.Hp -= damageSize;
+        if (status.Hp <= 0)
+        {
+            MaterialResource resource = targetGameObject.GetComponent<MaterialResource>();
+            addItemToInventory(resource);
+            destroyItemObject(targetGameObject);
+        }
+    }
+
+    public void addItemToInventory(MaterialResource resource)
+    {
+        Inventory inventory = GetComponent<Inventory>();
+        inventory.addItem(resource);
     }
 
     public void destroyItemObject(GameObject gameObject)
