@@ -35,12 +35,12 @@ public class PlayerAttack : MonoBehaviour
 
                     if (rayHit.collider.tag == "Item")
                     {
-                        mineItems(rayHit);
+                        attackObject(rayHit);
                     }
 
                     if (rayHit.collider.tag == "Resource")
                     {
-                        mineResource(rayHit);
+                        getResource(rayHit);
                     }
 
                     if (rayHit.collider.tag == "Enemy")
@@ -74,33 +74,44 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    public void mineItems(RaycastHit2D rayHit)
+    private void attackObject(RaycastHit2D rayHit)
     {
         GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
         ObjectStatus status = targetGameObject.GetComponent<ObjectStatus>();
         status.Hp -= damageSize;
         if (status.Hp <= 0)
         {
-            Items resources = targetGameObject.GetComponent<Items>();
-            foreach (MaterialResource resource in resources.ItemList)
-            {
-                addItemToInventory(resource);
-                destroyItemObject(targetGameObject);
-            }
+            mineItems(rayHit);
         }
     }
 
-    public void mineResource(RaycastHit2D rayHit)
+    public void mineItems(RaycastHit2D rayHit)
+    {
+        GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
+        Items resources = targetGameObject.GetComponent<Items>();
+        foreach (MaterialResource resource in resources.ItemList)
+        {
+            addItemToInventory(resource);
+            destroyItemObject(targetGameObject);
+        }
+    }
+
+    public void getResource(RaycastHit2D rayHit)
     {
         GameObject targetGameObject = rayHit.transform.gameObject as GameObject;
         ObjectStatus status = targetGameObject.GetComponent<ObjectStatus>();
         status.Hp -= damageSize;
         if (status.Hp <= 0)
         {
-            MaterialResource resource = targetGameObject.GetComponent<MaterialResource>();
-            addItemToInventory(resource);
-            destroyItemObject(targetGameObject);
+            mineResource(targetGameObject);
         }
+    }
+
+    public void mineResource(GameObject targetGameObject)
+    {
+        MaterialResource resource = targetGameObject.GetComponent<MaterialResource>();
+        addItemToInventory(resource);
+        destroyItemObject(targetGameObject);
     }
 
     public void addItemToInventory(MaterialResource resource)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ObjectStatus : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class ObjectStatus : MonoBehaviour
     private string name;
     [SerializeField]
     private int hp;
+
+    private Text materialInfoText;
 
     private void Start()
     {
@@ -36,5 +39,43 @@ public class ObjectStatus : MonoBehaviour
     public string newObjectID()
     {
         return System.Guid.NewGuid().ToString();
+    }
+
+    public void OnMouseOver()
+    {
+        materialInfoText = FindInActiveObjectByTag("MaterialInfo").GetComponent<Text>();
+        if (null != materialInfoText)
+        {
+            materialInfoText.gameObject.SetActive(true);
+            materialInfoText.text = name;
+            materialInfoText.transform.position = Input.mousePosition;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        materialInfoText.gameObject.SetActive(false);
+    }
+
+    private void OnMouseExit()
+    {
+        materialInfoText.gameObject.SetActive(false);
+    }
+
+    private GameObject FindInActiveObjectByTag(string tag)
+    {
+
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].CompareTag(tag))
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
     }
 }

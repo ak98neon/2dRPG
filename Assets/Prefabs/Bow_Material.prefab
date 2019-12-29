@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 482218268}
   - component: {fileID: -5649656793851319763}
   m_Layer: 0
-  m_Name: Bow
+  m_Name: Bow_Material
   m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Bow
-  prefab: {fileID: 7551611283569567077}
+  prefab: {fileID: 7551611283569567077, guid: 9c043ee38f1f6744d80b65dbeb959534, type: 3}
   resourceCount: 1
   strength: 1
   icon: {fileID: 5508725064705088119, guid: bc58aa1553155fb4aa2934532abc9768, type: 3}

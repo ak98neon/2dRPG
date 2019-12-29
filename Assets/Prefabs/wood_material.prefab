@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 8039098770029329553}
   - component: {fileID: 6407420384862280792}
   - component: {fileID: 8206837340056809879}
+  - component: {fileID: 690895630544790602}
+  - component: {fileID: -820798276298879266}
   m_Layer: 0
-  m_Name: wood
-  m_TagString: Untagged
+  m_Name: wood_material
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,8 +97,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Wood
-  prefab: {fileID: 7860496696927356961}
-  resource: Wood
+  prefab: {fileID: 7860496696927356961, guid: bf62a6a409d5e524783c7c062271f9bd, type: 3}
   resourceCount: 1
   strength: 3
   icon: {fileID: -3797582884924888402, guid: 87a8827138d8c5d499e737e9c4e5d69d, type: 3}
+--- !u!61 &690895630544790602
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7860496696927356961}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 0.41}
+    newSize: {x: 0.5, y: 0.41}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.41}
+  m_EdgeRadius: 0
+--- !u!114 &-820798276298879266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7860496696927356961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e647c2d9878bbbf4f921e3672358cf3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  name: Wood
+  hp: 1

@@ -10,6 +10,8 @@ public class Inventory : MonoBehaviour
     private InventoryCell _inventoryCellTemplate;
     [SerializeField]
     private Transform container;
+    [SerializeField]
+    private Transform _draggingParent;
 
     public List<MaterialResource> Items { get => items; set => items = value; }
 
@@ -37,7 +39,23 @@ public class Inventory : MonoBehaviour
         items.ForEach(item =>
         {
             var cell = Instantiate(_inventoryCellTemplate, container);
+            cell.Init(_draggingParent);
             cell.Render(item);
+
+            cell.Ejecting += () => {
+                items.Remove(item);
+                dropItem(item);
+                Destroy(cell.gameObject);
+            };
         });
+    }
+
+    private void dropItem(MaterialResource material)
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            Instantiate(material.Prefab, player.transform.position, Quaternion.identity);
+        }
     }
 }
