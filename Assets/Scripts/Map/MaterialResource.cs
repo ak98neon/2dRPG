@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MaterialResource : MonoBehaviour
+public class MaterialResource : MonoBehaviour, IItem
 {
     [SerializeField]
     private string name;

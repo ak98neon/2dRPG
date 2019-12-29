@@ -11,6 +11,7 @@ TagManager:
   - Item
   - Resource
   - Enemy
+  - InventoryPanel
   layers:
   - Default
   - TransparentFX

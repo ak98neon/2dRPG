@@ -8,10 +8,12 @@ public class PlayerAttack : MonoBehaviour
     private int damageSize;
     [SerializeField]
     private TypeWeapon typeOfWeapon;
+    [SerializeField]
+    private Inventory inventory;
 
     void Start()
     {
-
+        inventory = FindInActiveObjectByTag("InventoryPanel").GetComponent<Inventory>();
     }
 
     void Update()
@@ -103,7 +105,6 @@ public class PlayerAttack : MonoBehaviour
 
     public void addItemToInventory(MaterialResource resource)
     {
-        Inventory inventory = GetComponent<Inventory>();
         inventory.addItem(resource);
     }
 
@@ -113,6 +114,23 @@ public class PlayerAttack : MonoBehaviour
         {
             gameObject.GetComponent<ObjectStatus>().DestroyObject();
         }
+    }
+
+    private GameObject FindInActiveObjectByTag(string tag)
+    {
+
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].CompareTag(tag))
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
     }
 
     public enum TypeWeapon { 
